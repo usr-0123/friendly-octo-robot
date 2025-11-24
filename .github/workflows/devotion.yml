@@ -1,0 +1,52 @@
+name: Daily Bible Verse Emailer
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # Daily at 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  send_verse:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run verse script and save output to file
+        id: getverse
+        env:
+          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+        run: |
+          node sendVerse.js > verse.txt
+          echo "VERSE_CONTENT<<EOF" >> $GITHUB_ENV
+          cat verse.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Append verse to README.md
+        run: |
+          echo "## 📖 Daily Bible Verse — $(date +"%Y-%m-%d")" >> README.md
+          echo "" >> README.md
+          echo "${VERSE_CONTENT}" >> README.md
+          echo "" >> README.md
+          echo "---" >> README.md
+          echo "" >> README.md
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add README.md
+          git commit -m "Add daily Bible verse for $(date +"%Y-%m-%d")" || echo "No changes to commit"
+          git push
