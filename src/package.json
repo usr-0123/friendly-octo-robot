@@ -1,0 +1,9 @@
+{
+  "name": "daily-bible-verse",
+  "version": "1.0.0",
+  "main": "sendVerse.js",
+  "dependencies": {
+    "nodemailer": "^6.9.0",
+    "node-fetch": "^2.6.7"
+  }
+}
