@@ -18,8 +18,7 @@ jobs:
           node-version: "18"
 
       - name: Install dependencies
-        run: npm install
-        working-directory: src
+        run: npm ci
 
       - name: Run verse script and save output to file
         id: getverse
@@ -29,10 +28,11 @@ jobs:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
-        run: node ./src/sendVerce.js
+        run: npm start
 
       - name: Append verse to README.md
         run: |
+          echo "" >> README.md
           echo "## 📖 Daily Bible Verse — $(date +"%Y-%m-%d")" >> README.md
           echo "" >> README.md
           echo "${VERSE_CONTENT}" >> README.md
