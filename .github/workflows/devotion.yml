@@ -2,7 +2,7 @@ name: Daily Bible Verse Emailer
 
 on:
   schedule:
-    - cron: "0 6 * * *"   # Daily at 06:00 UTC
+    - cron: "0 10 * * *"   # Daily at 06:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -19,6 +19,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: src
 
       - name: Run verse script and save output to file
         id: getverse
@@ -28,11 +29,8 @@ jobs:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
-        run: |
-          node sendVerse.js > verse.txt
-          echo "VERSE_CONTENT<<EOF" >> $GITHUB_ENV
-          cat verse.txt >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+        run: node sendVerse.js
+        working-directory: src
 
       - name: Append verse to README.md
         run: |
