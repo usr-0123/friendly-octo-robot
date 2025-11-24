@@ -50,7 +50,7 @@ async function sendEmail() {
     from: `Daily Bible Verse ${process.env.EMAIL_USER}`,
     to: process.env.RECIPIENT_EMAIL,
     subject: "Your Daily Bible Verse",
-    text: verseData ? `${verseData.random_verse.book} ${verseData.random_verse.chapter}:${verseData.random_verse.verse} - ${verseData.random_verse.text}` : "Error fetching verse.",
+    text: verseData ? `${verseData.random_verse?.book || "Book"} ${verseData.random_verse?.chapter || "Chapter"}:${verseData.random_verse?.verse || "Verse"} - ${verseData.random_verse?.text || "Verse Text"}` : "Error fetching verse.",
     html: generateHtml(verseData ? verseData.data : null),
   });
 
