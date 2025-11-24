@@ -32,7 +32,7 @@ function generateHtml(verseData) {
 }
 
 async function sendEmail() {
-  const verse = await getRandomVerse();
+  const verseData = await getRandomVerse();
 
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -48,8 +48,8 @@ async function sendEmail() {
     from: `Daily Bible Verse ${process.env.EMAIL_USER}`,
     to: process.env.RECIPIENT_EMAIL,
     subject: "Your Daily Bible Verse",
-    text: verse ? `${verseData.random_verse.book} ${verseData.random_verse.chapter}:${verseData.random_verse.verse} - ${verseData.random_verse.text}` : "Error fetching verse.",
-    html: generateHtml(verse ? verse.data : null),
+    text: verseData ? `${verseData.random_verse.book} ${verseData.random_verse.chapter}:${verseData.random_verse.verse} - ${verseData.random_verse.text}` : "Error fetching verse.",
+    html: generateHtml(verseData ? verseData.data : null),
   });
 
   console.log("Email sent:", info.messageId);
