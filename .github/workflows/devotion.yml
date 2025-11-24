@@ -29,12 +29,7 @@ jobs:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
-        run: |
-          cd src
-          node sendVerse.js > verse.txt
-          echo "VERSE_CONTENT<<EOF" >> $GITHUB_ENV
-          cat verse.txt >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+        run: node ./src/sendVerce.js
 
       - name: Append verse to README.md
         run: |
