@@ -34,6 +34,8 @@ function generateHtml(verseData) {
 async function sendEmail() {
   const verseData = await getRandomVerse();
 
+  console.log("Fetched Verse Data:", verseData ? verseData.data : "No data");
+
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
